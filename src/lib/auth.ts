@@ -17,7 +17,6 @@ export const authOption: AuthOptions = {
     secret: process.env.NEXTAUTH_SECRET || "",
     callbacks: {
         async jwt({ token, user }) {
-            console.log(token);
 
 
             const UserDb = (await Client.user.findFirst({
