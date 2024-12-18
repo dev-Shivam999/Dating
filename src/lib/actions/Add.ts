@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/utils/db/mainDb";
+import prisma from "@/db/mainDb";
 
 export const Add = async (name: string) => {
     try {

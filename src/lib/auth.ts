@@ -1,5 +1,5 @@
 import { AuthOptions, User } from "next-auth";
-import Client from "@/utils/db/mainDb"
+import Client from "@/db/mainDb"
 import GoogleProvider from "next-auth/providers/google";
 
 export const authOption: AuthOptions = {
@@ -28,14 +28,14 @@ export const authOption: AuthOptions = {
             if (!UserDb) {
 
                 token.id = user.id
-                if (token.email && token.id&&token.name&&token.picture) {
-                    
+                if (token.email && token.id && token.name && token.picture) {
+
                     await Client.user.create({
                         data: {
                             email: token.email,
                             image: token.picture,
                             name: token.name,
-                            
+
                             id: token.id
                         }
                     })
