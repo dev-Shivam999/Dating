@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id
+  name  String
+  email String @unique
+  image String
+
+  friends1 Friendship[] @relation("FriendshipMeet1")
+  friends2 Friendship[] @relation("FriendshipMeet2")
+  ChatBox ChatBox[]    @relation("ChatBoxRelation")
+
+  messageBox MessageBox? @relation("MessageBoxRelation")
+}
+
+model MessageBox {
+  id     Int    @id @default(autoincrement())
+  userId String @unique
+  user   User   @relation("MessageBoxRelation", fields: [userId], references: [id], onDelete: Cascade)
+
+  ChatBox ChatBox[] @relation("ChatBoxRelation")
+}
+
+model ChatBox {
+  id      Int    @id @default(autoincrement())
+  UserId1 String @unique
+  UserId2 String @unique
+
+  message Chat[]     @relation("message")
+  user1   MessageBox @relation("ChatBoxRelation", fields: [UserId1], references: [userId], onDelete: Cascade)
+  user2   User       @relation("ChatBoxRelation", fields: [UserId2], references: [id], onDelete: Cascade)
+}
+
+model Chat {
+  id        Int     @id @default(autoincrement())
+  message   String
+  chatBoxId Int
+  user      ChatBox @relation("message", fields: [chatBoxId], references: [id], onDelete: Cascade)
+}
+
+model Friendship {
+  id      Int    @id @default(autoincrement())
+  userId1 String
+  userId2 String
+  status  Status
+  user1   User   @relation("FriendshipMeet1", fields: [userId1], references: [id], onDelete: Cascade)
+  user2   User   @relation("FriendshipMeet2", fields: [userId2], references: [id], onDelete: Cascade)
+}
+
+enum Status{
+  Accept
+  Reject
+  Pending
+}
